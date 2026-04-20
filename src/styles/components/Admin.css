@@ -246,6 +246,12 @@
   background: var(--color-accent-hover);
 }
 
+.admin-post-content {
+  max-width: 300px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
 /* ── TABLET ──────────────────────────────────────── */
 @media (max-width: 768px) {
   .admin-container {

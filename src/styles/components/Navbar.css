@@ -97,6 +97,10 @@
   object-fit: cover;
 }
 
+.navbar-avatar span {
+  color: var(--color-white);
+}
+
 .btn-logout {
   padding: var(--space-xs) var(--space-md);
   background: transparent;

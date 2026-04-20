@@ -6,7 +6,9 @@ import {
   getJuegosService,
   eliminarJuegoService,
   crearJuegoService,
-  editarJuegoService
+  editarJuegoService,
+  getPostsService,
+  eliminarPostService
 } from '../services/api'
 import Loader from '../components/ui/Loader'
 import Modal from '../components/ui/Modal'
@@ -18,16 +20,18 @@ const Admin = () => {
 
   const [tabActiva, setTabActiva] = useState('juegos')
   const [juegos, setJuegos] = useState([])
+  const [posts, setPosts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [loadingPosts, setLoadingPosts] = useState(false)
   const [modalJuego, setModalJuego] = useState(false)
   const [juegoEditando, setJuegoEditando] = useState(null)
   const [confirmacion, setConfirmacion] = useState(null)
+  const [confirmacionPost, setConfirmacionPost] = useState(null)
   const [formJuego, setFormJuego] = useState({
     title: '', genre: '', platform: '',
     year: '', developer: '', rating: '', description: ''
   })
 
-  // Redirige si no es admin
   useEffect(() => {
     if (user && user.role !== 'admin') {
       navigate('/')
@@ -47,20 +51,47 @@ const Admin = () => {
     }
   }
 
+  const fetchPosts = async () => {
+    try {
+      setLoadingPosts(true)
+      const { data } = await getPostsService({ limit: 100 })
+      setPosts(data.posts)
+    } catch {
+      toast.error('Error al cargar posts')
+    } finally {
+      setLoadingPosts(false)
+    }
+  }
+
   useEffect(() => {
     fetchJuegos()
   }, [])
 
+  useEffect(() => {
+    if (tabActiva === 'posts') fetchPosts()
+  }, [tabActiva])
+
   const handleEliminarJuego = async () => {
-  try {
-    await eliminarJuegoService(confirmacion.id)
-    toast.success('Juego eliminado')
-    setConfirmacion(null)
-    fetchJuegos()
-  } catch {
-    toast.error('Error al eliminar el juego')
+    try {
+      await eliminarJuegoService(confirmacion.id)
+      toast.success('Juego eliminado')
+      setConfirmacion(null)
+      fetchJuegos()
+    } catch {
+      toast.error('Error al eliminar el juego')
+    }
   }
-}
+
+  const handleEliminarPost = async () => {
+    try {
+      await eliminarPostService(confirmacionPost.id)
+      toast.success('Post eliminado')
+      setConfirmacionPost(null)
+      fetchPosts()
+    } catch {
+      toast.error('Error al eliminar el post')
+    }
+  }
 
   const handleAbrirModalCrear = () => {
     setJuegoEditando(null)
@@ -86,26 +117,25 @@ const Admin = () => {
   }
 
   const handleGuardarJuego = async () => {
-  try {
-    const datosFormateados = {
-      ...formJuego,
-      year: Number(formJuego.year),
-      rating: Number(formJuego.rating)
+    try {
+      const datosFormateados = {
+        ...formJuego,
+        year: Number(formJuego.year),
+        rating: Number(formJuego.rating)
+      }
+      if (juegoEditando) {
+        await editarJuegoService(juegoEditando._id, datosFormateados)
+        toast.success('Juego actualizado correctamente')
+      } else {
+        await crearJuegoService(datosFormateados)
+        toast.success('Juego creado correctamente')
+      }
+      setModalJuego(false)
+      fetchJuegos()
+    } catch {
+      toast.error('Error al guardar el juego')
     }
-
-    if (juegoEditando) {
-      await editarJuegoService(juegoEditando._id, datosFormateados)
-      toast.success('Juego actualizado correctamente')
-    } else {
-      await crearJuegoService(datosFormateados)
-      toast.success('Juego creado correctamente')
-    }
-    setModalJuego(false)
-    fetchJuegos()
-  } catch {
-    toast.error('Error al guardar el juego')
   }
-}
 
   const handleFormChange = (e) => {
     setFormJuego({ ...formJuego, [e.target.name]: e.target.value })
@@ -116,19 +146,23 @@ const Admin = () => {
   return (
     <div className="admin-container">
 
-      {/* Cabecera */}
       <div className="admin-header">
         <h1 className="admin-title">⚙️ Panel de Administración</h1>
         <p className="admin-subtitle">Bienvenido, @{user?.username}</p>
       </div>
 
-      {/* Tabs */}
       <div className="admin-tabs">
         <button
           className={`admin-tab ${tabActiva === 'juegos' ? 'active' : ''}`}
           onClick={() => setTabActiva('juegos')}
         >
           🎮 Juegos ({juegos.length})
+        </button>
+        <button
+          className={`admin-tab ${tabActiva === 'posts' ? 'active' : ''}`}
+          onClick={() => setTabActiva('posts')}
+        >
+          📝 Posts ({posts.length})
         </button>
       </div>
 
@@ -137,10 +171,7 @@ const Admin = () => {
         <div className="admin-section">
           <div className="admin-section-header">
             <h2>Gestión de Juegos</h2>
-            <button
-              onClick={handleAbrirModalCrear}
-              className="btn-primary"
-            >
+            <button onClick={handleAbrirModalCrear} className="btn-primary">
               + Añadir juego
             </button>
           </div>
@@ -182,7 +213,6 @@ const Admin = () => {
                         >
                           Editar
                         </button>
-                        {/* ✅ CAMBIO: abre modal en lugar de window.confirm */}
                         <button
                           onClick={() => setConfirmacion({ id: juego._id, titulo: juego.title })}
                           className="btn-delete"
@@ -196,6 +226,61 @@ const Admin = () => {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {/* Tab Posts */}
+      {tabActiva === 'posts' && (
+        <div className="admin-section">
+          <div className="admin-section-header">
+            <h2>Gestión de Posts</h2>
+          </div>
+
+          {loadingPosts ? (
+            <Loader />
+          ) : (
+            <div className="admin-table-wrapper">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Autor</th>
+                    <th>Contenido</th>
+                    <th>Juego</th>
+                    <th>Likes</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {posts.map((post) => (
+                    <tr key={post._id}>
+                      <td>
+                        <Link to={`/profile/${post.author?.username}`}>
+                          @{post.author?.username}
+                        </Link>
+                      </td>
+                      <td className="admin-post-content">
+                        {post.content.slice(0, 80)}
+                        {post.content.length > 80 ? '...' : ''}
+                      </td>
+                      <td>{post.game?.title || '—'}</td>
+                      <td>❤️ {post.likes?.length || 0}</td>
+                      <td>
+                        <button
+                          onClick={() => setConfirmacionPost({
+                            id: post._id,
+                            titulo: post.content.slice(0, 40) + '...'
+                          })}
+                          className="btn-delete"
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
 
@@ -292,7 +377,7 @@ const Admin = () => {
         </div>
       </Modal>
 
-      {/* ✅ NUEVO: Modal confirmación eliminar */}
+      {/* Modal confirmación eliminar juego */}
       <Modal
         isOpen={!!confirmacion}
         onClose={() => setConfirmacion(null)}
@@ -307,6 +392,30 @@ const Admin = () => {
             </button>
             <button
               onClick={() => setConfirmacion(null)}
+              className="btn-secondary"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Modal confirmación eliminar post */}
+      <Modal
+        isOpen={!!confirmacionPost}
+        onClose={() => setConfirmacionPost(null)}
+        title="Eliminar post"
+      >
+        <div className="admin-confirm">
+          <p>¿Estás seguro de que quieres eliminar este post?</p>
+          <p className="admin-confirm-warning">"{confirmacionPost?.titulo}"</p>
+          <p className="admin-confirm-warning">Esta acción no se puede deshacer.</p>
+          <div className="admin-form-actions">
+            <button onClick={handleEliminarPost} className="btn-delete-confirm">
+              Sí, eliminar
+            </button>
+            <button
+              onClick={() => setConfirmacionPost(null)}
               className="btn-secondary"
             >
               Cancelar
