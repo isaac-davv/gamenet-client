@@ -10,18 +10,44 @@ const PostForm = ({ onPostCreado, juegoPreseleccionado = '' }) => {
   const [gameId, setGameId] = useState(juegoPreseleccionado)
   const [juegos, setJuegos] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [imagen, setImagen] = useState(null)
+  const [previsualizacion, setPrevisualizacion] = useState(null)
 
   useEffect(() => {
     const fetchJuegos = async () => {
       try {
         const { data } = await getJuegosService({ limit: 105 })
         setJuegos(data.juegos)
-      } catch (error) {
-        console.error('Error al cargar juegos:', error)
+      } catch {
+        console.error('Error al cargar juegos')
       }
     }
     fetchJuegos()
   }, [])
+
+  const handleImagenChange = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    // Validamos que sea imagen y menos de 5MB
+    if (!file.type.startsWith('image/')) {
+      toast.error('El archivo debe ser una imagen')
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('La imagen no puede superar los 5MB')
+      return
+    }
+
+    setImagen(file)
+    // Creamos una URL temporal para previsualizar
+    setPrevisualizacion(URL.createObjectURL(file))
+  }
+
+  const handleQuitarImagen = () => {
+    setImagen(null)
+    setPrevisualizacion(null)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -33,12 +59,21 @@ const PostForm = ({ onPostCreado, juegoPreseleccionado = '' }) => {
 
     setIsLoading(true)
     try {
-      await crearPostService({ content, game: gameId })
+      const formData = new FormData()
+      formData.append('content', content)
+      formData.append('game', gameId)
+      if (imagen) {
+        formData.append('image', imagen)
+      }
+
+      await crearPostService(formData)
       setContent('')
-      setGameId('')
+      setGameId(juegoPreseleccionado)
+      setImagen(null)
+      setPrevisualizacion(null)
       toast.success('Post publicado')
       onPostCreado()
-    } catch  {
+    } catch {
       toast.error('Error al publicar el post')
     } finally {
       setIsLoading(false)
@@ -67,6 +102,19 @@ const PostForm = ({ onPostCreado, juegoPreseleccionado = '' }) => {
           rows={3}
         />
 
+        {previsualizacion && (
+          <div className="post-form-preview">
+            <img src={previsualizacion} alt="Preview" />
+            <button
+              type="button"
+              className="post-form-preview-remove"
+              onClick={handleQuitarImagen}
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
         <div className="post-form-footer">
           <select
             value={gameId}
@@ -82,9 +130,18 @@ const PostForm = ({ onPostCreado, juegoPreseleccionado = '' }) => {
           </select>
 
           <div className="post-form-actions">
-            <span className="post-form-counter">
-              {content.length}/500
-            </span>
+            <span className="post-form-counter">{content.length}/500</span>
+
+            <label className="btn-imagen" title="Añadir imagen">
+              📷
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImagenChange}
+                style={{ display: 'none' }}
+              />
+            </label>
+
             <button
               type="submit"
               className="btn-primary"

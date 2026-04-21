@@ -38,7 +38,9 @@ export const eliminarJuegoService = (id) => api.delete(`/games/${id}`)
 // ── POSTS ────────────────────────────────────────────────────
 export const getPostsService   = (params) => api.get('/posts', { params })
 export const getPostService    = (id)     => api.get(`/posts/${id}`)
-export const crearPostService  = (data)   => api.post('/posts', data)
+export const crearPostService = (data) => api.post('/posts', data, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+})
 export const editarPostService = (id, data) => api.put(`/posts/${id}`, data)
 export const eliminarPostService = (id)   => api.delete(`/posts/${id}`)
 export const darLikeService    = (id)     => api.post(`/posts/${id}/like`)
