@@ -19,6 +19,7 @@ Frontend de GameNet, una red social para gamers. Desarrollado como proyecto fina
 
 ## 📁 Estructura del proyecto
 
+```
 gamenet-client/
 ├── src/
 │   ├── components/
@@ -31,6 +32,7 @@ gamenet-client/
 │   ├── services/        → api.js (Axios centralizado)
 │   ├── styles/          → CSS variables + componentes
 │   └── utils/           → formatDate
+```
 
 ## 🎨 Funcionalidades
 
