@@ -125,7 +125,6 @@ const Games = () => {
           </button>
         </div>
       ) : (
-        // ✅ CAMBIO: grid con animación escalonada
         <motion.div
           className="games-grid"
           initial="hidden"
@@ -136,7 +135,6 @@ const Games = () => {
           }}
         >
           {juegosfiltrados.map((juego) => (
-            // ✅ CAMBIO: cada card con fade in escalonado
             <motion.div
               key={juego._id}
               variants={{

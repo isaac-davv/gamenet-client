@@ -216,7 +216,7 @@
   text-decoration: underline;
 }
 
-/* ── TABLET ──────────────────────────────────────── */
+/*TABLET*/
 @media (max-width: 768px) {
   .gamedetail-hero-content {
     flex-direction: column;
@@ -238,7 +238,7 @@
   }
 }
 
-/* ── MOBILE ──────────────────────────────────────── */
+/*MOBILE*/
 @media (max-width: 480px) {
   .gamedetail-hero-content {
     padding: var(--space-md) var(--space-sm);

@@ -29,7 +29,6 @@ const PostForm = ({ onPostCreado, juegoPreseleccionado = '' }) => {
     const file = e.target.files[0]
     if (!file) return
 
-    // Validamos que sea imagen y menos de 5MB
     if (!file.type.startsWith('image/')) {
       toast.error('El archivo debe ser una imagen')
       return
@@ -40,7 +39,6 @@ const PostForm = ({ onPostCreado, juegoPreseleccionado = '' }) => {
     }
 
     setImagen(file)
-    // Creamos una URL temporal para previsualizar
     setPrevisualizacion(URL.createObjectURL(file))
   }
 

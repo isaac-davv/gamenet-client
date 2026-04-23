@@ -133,7 +133,7 @@
   background: var(--color-accent-hover);
 }
 
-/* ── HAMBURGUESA ─────────────────────────────────── */
+/*HAMBURGUESA*/
 .navbar-hamburger {
   display: none;
   flex-direction: column;
@@ -153,7 +153,7 @@
   display: block;
 }
 
-/* ── OVERLAY ─────────────────────────────────────── */
+/*OVERLAY*/
 .navbar-overlay {
   position: fixed;
   inset: 0;
@@ -161,7 +161,7 @@
   z-index: 200;
 }
 
-/* ── DRAWER ──────────────────────────────────────── */
+/*DRAWER*/
 .navbar-drawer {
   position: fixed;
   top: 0;
@@ -271,7 +271,7 @@
   color: var(--color-white);
 }
 
-/* ── TABLET ──────────────────────────────────────── */
+/*TABLET*/
 @media (max-width: 768px) {
   .navbar-container {
     padding: 0 var(--space-md);
@@ -303,7 +303,7 @@
   }
 }
 
-/* ── MOBILE ──────────────────────────────────────── */
+/*MOBILE*/
 @media (max-width: 480px) {
   .navbar-container {
     height: 52px;

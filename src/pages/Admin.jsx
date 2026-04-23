@@ -284,7 +284,6 @@ const Admin = () => {
         </div>
       )}
 
-      {/* Modal crear/editar juego */}
       <Modal
         isOpen={modalJuego}
         onClose={() => setModalJuego(false)}
@@ -377,7 +376,6 @@ const Admin = () => {
         </div>
       </Modal>
 
-      {/* Modal confirmación eliminar juego */}
       <Modal
         isOpen={!!confirmacion}
         onClose={() => setConfirmacion(null)}
@@ -400,7 +398,6 @@ const Admin = () => {
         </div>
       </Modal>
 
-      {/* Modal confirmación eliminar post */}
       <Modal
         isOpen={!!confirmacionPost}
         onClose={() => setConfirmacionPost(null)}

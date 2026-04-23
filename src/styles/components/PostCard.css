@@ -125,7 +125,7 @@
   color: var(--color-accent);
 }
 
-/* ── TABLET ──────────────────────────────────────── */
+/*TABLET*/
 @media (max-width: 768px) {
   .post-card {
     padding: var(--space-md);
@@ -140,7 +140,7 @@
   }
 }
 
-/* ── MOBILE ──────────────────────────────────────── */
+/*MOBILE*/
 @media (max-width: 480px) {
   .post-card-header {
     flex-wrap: wrap;

@@ -7,17 +7,14 @@ const initialState = {
   user: null,
   token: localStorage.getItem('token') || null,
   isAuthenticated: false,
-  isLoading: true   // true al inicio para verificar el token
+  isLoading: true   
 }
 
-// ── REDUCER ──────────────────────────────────────────────────
-// El reducer recibe el estado actual y una acción,
-// y devuelve el nuevo estado según el tipo de acción
+//REDUCER 
 const authReducer = (state, action) => {
   switch (action.type) {
 
     case 'LOGIN':
-      // Guardamos el token en localStorage para persistir la sesión
       localStorage.setItem('token', action.payload.token)
       return {
         ...state,
@@ -54,13 +51,11 @@ const authReducer = (state, action) => {
   }
 }
 
-// ── CONTEXTO ─────────────────────────────────────────────────
+//CONTEXTO 
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState)
 
-  // Al montar la app verificamos si hay un token guardado
-  // y si es válido cargamos los datos del usuario
   useEffect(() => {
     const verificarToken = async () => {
       const token = localStorage.getItem('token')
@@ -78,7 +73,6 @@ export const AuthProvider = ({ children }) => {
         })
     // eslint-disable-next-line no-unused-vars
       } catch (error) {
-        // Si el token no es válido lo eliminamos
         dispatch({ type: 'LOGOUT' })
       }
     }
@@ -86,8 +80,6 @@ export const AuthProvider = ({ children }) => {
     verificarToken()
   }, [])
 
-  // Funciones que los componentes usarán para interactuar
-  // con el estado global
   const login = (userData) => {
     dispatch({ type: 'LOGIN', payload: userData })
   }

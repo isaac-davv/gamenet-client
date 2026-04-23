@@ -140,7 +140,7 @@
   border-color: var(--color-accent);
 }
 
-/* ── TABLET ──────────────────────────────────────── */
+/*TABLET*/
 @media (max-width: 768px) {
   .post-form {
     padding: var(--space-md);
@@ -156,7 +156,7 @@
   }
 }
 
-/* ── MOBILE ──────────────────────────────────────── */
+/*MOBILE*/
 @media (max-width: 480px) {
   .post-form {
     padding: var(--space-sm);

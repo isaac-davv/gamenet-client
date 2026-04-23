@@ -241,7 +241,6 @@ const Profile = () => {
 
       </div>
 
-      {/* Modal seguidores */}
       <Modal
         isOpen={modalAbierto === 'followers'}
         onClose={() => setModalAbierto(null)}
@@ -269,7 +268,6 @@ const Profile = () => {
         )}
       </Modal>
 
-      {/* Modal siguiendo */}
       <Modal
         isOpen={modalAbierto === 'following'}
         onClose={() => setModalAbierto(null)}

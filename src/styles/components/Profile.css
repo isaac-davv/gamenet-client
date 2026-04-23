@@ -187,7 +187,7 @@
   color: var(--color-text);
 }
 
-/* ── TABLET ──────────────────────────────────────── */
+/*TABLET*/
 @media (max-width: 768px) {
   .profile-container {
     padding: var(--space-lg) var(--space-md);
@@ -209,7 +209,7 @@
   }
 }
 
-/* ── MOBILE ──────────────────────────────────────── */
+/*MOBILE*/
 @media (max-width: 480px) {
   .profile-container {
     padding: var(--space-md) var(--space-sm);

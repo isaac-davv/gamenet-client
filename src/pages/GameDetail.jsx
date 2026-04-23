@@ -51,7 +51,6 @@ const GameDetail = () => {
   return (
     <div className="gamedetail-container">
 
-      {/* ✅ CAMBIO: div → motion.div con fade desde arriba */}
       <motion.div
         className="gamedetail-hero"
         initial={{ opacity: 0, y: -20 }}
@@ -95,7 +94,6 @@ const GameDetail = () => {
         </div>
       </motion.div>
 
-      {/* ✅ CAMBIO: div → motion.div con fade */}
       <motion.div
         className="gamedetail-posts"
         initial={{ opacity: 0 }}

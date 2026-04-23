@@ -252,7 +252,7 @@
   font-size: var(--font-size-xs);
 }
 
-/* ── TABLET ──────────────────────────────────────── */
+/*TABLET */
 @media (max-width: 768px) {
   .admin-container {
     padding: var(--space-lg) var(--space-md);
@@ -279,7 +279,7 @@
   }
 }
 
-/* ── MOBILE ──────────────────────────────────────── */
+/*MOBILE*/
 @media (max-width: 480px) {
   .admin-container {
     padding: var(--space-md) var(--space-sm);

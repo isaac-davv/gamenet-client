@@ -13,7 +13,6 @@ const PostCard = ({ post, onLike }) => {
 
   const yaLeGusto = post.likes?.includes(user?._id)
 
-  // useCallback para no recrear la función en cada render
   const handleLike = useCallback(async () => {
     if (!isAuthenticated) {
       toast.error('Debes iniciar sesión para dar like')
@@ -22,13 +21,12 @@ const PostCard = ({ post, onLike }) => {
     try {
       await darLikeService(post._id)
       onLike()
-    } catch (error) {
+    } catch  {
       toast.error('Error al dar like')
     }
   }, [post._id, isAuthenticated, onLike])
 
   return (
-    // ✅ CAMBIO: article → motion.article con fade in
     <motion.article
       className="post-card"
       initial={{ opacity: 0, y: 20 }}

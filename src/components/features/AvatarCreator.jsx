@@ -3,7 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import '../../styles/components/AvatarCreator.css'
 
-// ── MODELO 3D DEL AVATAR ─────────────────────────────────────
+// MODELO 3D DEL AVATAR 
 export const AvatarCartoon = ({ config }) => {
   const grupoRef = useRef()
 
@@ -132,8 +132,7 @@ export const AvatarCartoon = ({ config }) => {
   )
 }
 
-// ── COMPONENTE PRINCIPAL ─────────────────────────────────────
-// ✅ CAMBIO: añadimos prop soloVista para ocultar controles
+// COMPONENTE PRINCIPAL
 const AvatarCreator = ({ config, onChange, soloVista = false }) => {
   const opciones = {
     skinColor: [
@@ -178,7 +177,6 @@ const AvatarCreator = ({ config, onChange, soloVista = false }) => {
   }
 
   return (
-    // ✅ CAMBIO: clase dinámica según soloVista
     <div className={`avatar-creator ${soloVista ? 'solo-vista' : ''}`}>
 
       <div className="avatar-canvas">
@@ -199,7 +197,6 @@ const AvatarCreator = ({ config, onChange, soloVista = false }) => {
         </Canvas>
       </div>
 
-      {/* ✅ CAMBIO: controles solo visibles cuando NO es soloVista */}
       {!soloVista && (
         <div className="avatar-controls">
           <div className="avatar-control-group">

@@ -35,7 +35,6 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      {/* ✅ CAMBIO: div → motion.div con slide in desde abajo */}
       <motion.div
         className="auth-card"
         initial={{ opacity: 0, y: 30 }}
